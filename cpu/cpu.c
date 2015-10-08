@@ -101,6 +101,7 @@ int fetch_decode(RAM *ram, registers *reg)
  */
 int decode1B(RAM *ram, registers *reg, uint8_t opc)
 {
+	//note: keep opcodes in order so compiler will optimize to jump tables over if-else chains
 	switch (opc) {
 		
 	case 0x00: nop(); break;
@@ -203,7 +204,7 @@ int decode2B(RAM *ram, registers *reg, uint8_t opc_hi)
 {
 	uint16_t opc;
 	
-	opc |= opc_hi;
+	opc |= (opc_hi << 4);
 	opc |= ram->mem[reg->pc++];
 	
 	//now opc is loaded up with the whole opcode
