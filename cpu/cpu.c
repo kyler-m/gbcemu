@@ -402,9 +402,8 @@ void set(uint8_t *b, uint8_t *reg)
  */
 void res(uint8_t *b, uint8_t *reg)
 {
-	*reg &= (0xFE << *b);
-	if (*b > 0)
-		*reg |= (0x1 << (*b - 1));
+	*reg &= ~(0x1 << *b);
+
 }
 
 //note: might need to take endianess into account
