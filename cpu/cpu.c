@@ -398,6 +398,7 @@ void set(uint8_t *b, uint8_t *reg)
 
 /*
  * Reset bit b in register reg.
+ * Logic is wrong here; TODO FIX
  */
 void res(uint8_t *b, uint8_t *reg)
 {
