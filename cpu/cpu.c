@@ -55,7 +55,7 @@ void	lor(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	land(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	ld(uint8_t *dest, uint8_t *src);
 void	cp(uint8_t *reg, uint8_t *n, uint8_t *f);
-void	ret(uint8_t *sp);
+void	ret(uint16_t *sp, uint16_t *pc);
 int	fetch_decode(RAM *ram, int pc);
 int	decode1B(RAM *ram, registers *reg, uint8_t opc);
 int	decode2B(RAM *ram, registers *reg, uint8_t opc);
@@ -247,7 +247,7 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
 	case 0xBE: nop(); break; //TODO
 	case 0xBF: cp(&reg->a, &reg->a, &reg->f); break;
 	
-	case 0xC9: break;
+	case 0xC9: ret(&reg->sp, &reg->pc); break;
 	
 	}
 	
@@ -381,9 +381,9 @@ void cp(uint8_t *reg, uint8_t *n, uint8_t *f)
 /*
  * Pop two bytes from stack and jump to the resulting address.
  */
-void ret(uint8_t *sp)
+void ret(uint16_t *sp, uint16_t *pc)
 {
-	//TODO
+	*pc = *sp++;
 }
 
 //note: might need to take endianess into account
