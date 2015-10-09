@@ -52,6 +52,7 @@ void 	dec(uint8_t *reg, uint8_t *f);
 void	lxor(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	lor(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	land(uint8_t *dest, uint8_t *src, uint8_t *f);
+void	ld(uint8_t *dest, uint8_t *src);
 int	fetch_decode(RAM *ram, int pc);
 int	decode1B(RAM *ram, registers *reg, uint8_t opc);
 int	decode2B(RAM *ram, registers *reg, uint8_t opc);
@@ -127,67 +128,67 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
 	//....
 	case 0x3C: inc(&reg->a, &reg->f); break;
 	
-	case 0x40: ld_reg(ram, &reg->b, &reg->b); break;
-	case 0x41: ld_reg(ram, &reg->b, &reg->c); break;
-	case 0x42: ld_reg(ram, &reg->b, &reg->d); break;
-	case 0x43: ld_reg(ram, &reg->b, &reg->e); break;
-	case 0x44: ld_reg(ram, &reg->b, &reg->h); break;
-	case 0x45: ld_reg(ram, &reg->b, &reg->l); break;
+	case 0x40: ld(&reg->b, &reg->b); break;
+	case 0x41: ld(&reg->b, &reg->c); break;
+	case 0x42: ld(&reg->b, &reg->d); break;
+	case 0x43: ld(&reg->b, &reg->e); break;
+	case 0x44: ld(&reg->b, &reg->h); break;
+	case 0x45: ld(&reg->b, &reg->l); break;
 	case 0x46: nop(); break; //TODO
-	case 0x47: ld_reg(ram, &reg->b, &reg->a); break;
-	case 0x48: ld_reg(ram, &reg->c, &reg->b); break;
-	case 0x49: ld_reg(ram, &reg->c, &reg->c); break;
-	case 0x4A: ld_reg(ram, &reg->c, &reg->d); break;
-	case 0x4B: ld_reg(ram, &reg->c, &reg->e); break;
-	case 0x4C: ld_reg(ram, &reg->c, &reg->h); break;
-	case 0x4D: ld_reg(ram, &reg->c, &reg->l); break;
+	case 0x47: ld(&reg->b, &reg->a); break;
+	case 0x48: ld(&reg->c, &reg->b); break;
+	case 0x49: ld(&reg->c, &reg->c); break;
+	case 0x4A: ld(&reg->c, &reg->d); break;
+	case 0x4B: ld(&reg->c, &reg->e); break;
+	case 0x4C: ld(&reg->c, &reg->h); break;
+	case 0x4D: ld(&reg->c, &reg->l); break;
 	case 0x4E: nop(); break; //TODO
-	case 0x4F: ld_reg(ram, &reg->c, &reg->a); break;
+	case 0x4F: ld(&reg->c, &reg->a); break;
 	
-	case 0x50: ld_reg(ram, &reg->d, &reg->b); break;
-	case 0x51: ld_reg(ram, &reg->d, &reg->c); break;
-	case 0x52: ld_reg(ram, &reg->d, &reg->d); break;
-	case 0x53: ld_reg(ram, &reg->d, &reg->e); break;
-	case 0x54: ld_reg(ram, &reg->d, &reg->h); break;
-	case 0x55: ld_reg(ram, &reg->d, &reg->l); break;
+	case 0x50: ld(&reg->d, &reg->b); break;
+	case 0x51: ld(&reg->d, &reg->c); break;
+	case 0x52: ld(&reg->d, &reg->d); break;
+	case 0x53: ld(&reg->d, &reg->e); break;
+	case 0x54: ld(&reg->d, &reg->h); break;
+	case 0x55: ld(&reg->d, &reg->l); break;
 	case 0x56: nop(); break; //TODO
-	case 0x57: ld_reg(ram, &reg->d, &reg->a); break;
-	case 0x58: ld_reg(ram, &reg->e, &reg->b); break;
-	case 0x59: ld_reg(ram, &reg->e, &reg->c); break;
-	case 0x5A: ld_reg(ram, &reg->e, &reg->d); break;
-	case 0x5B: ld_reg(ram, &reg->e, &reg->e); break;
-	case 0x5C: ld_reg(ram, &reg->e, &reg->h); break;
-	case 0x5D: ld_reg(ram, &reg->e, &reg->l); break;
+	case 0x57: ld(&reg->d, &reg->a); break;
+	case 0x58: ld(&reg->e, &reg->b); break;
+	case 0x59: ld(&reg->e, &reg->c); break;
+	case 0x5A: ld(&reg->e, &reg->d); break;
+	case 0x5B: ld(&reg->e, &reg->e); break;
+	case 0x5C: ld(&reg->e, &reg->h); break;
+	case 0x5D: ld(&reg->e, &reg->l); break;
 	case 0x5E: nop(); break; //TODO
-	case 0x5F: ld_reg(ram, &reg->e, &reg->a); break;
+	case 0x5F: ld(&reg->e, &reg->a); break;
 	
-	case 0x60: ld_reg(ram, &reg->h, &reg->b); break;
-	case 0x61: ld_reg(ram, &reg->h, &reg->c); break;
-	case 0x62: ld_reg(ram, &reg->h, &reg->d); break;
-	case 0x63: ld_reg(ram, &reg->h, &reg->e); break;
-	case 0x64: ld_reg(ram, &reg->h, &reg->h); break;
-	case 0x65: ld_reg(ram, &reg->h, &reg->l); break;
+	case 0x60: ld(&reg->h, &reg->b); break;
+	case 0x61: ld(&reg->h, &reg->c); break;
+	case 0x62: ld(&reg->h, &reg->d); break;
+	case 0x63: ld(&reg->h, &reg->e); break;
+	case 0x64: ld(&reg->h, &reg->h); break;
+	case 0x65: ld(&reg->h, &reg->l); break;
 	case 0x66: nop(); break; //TODO
-	case 0x67: ld_reg(ram, &reg->h, &reg->a); break;
-	case 0x68: ld_reg(ram, &reg->l, &reg->b); break;
-	case 0x69: ld_reg(ram, &reg->l, &reg->c); break;
-	case 0x6A: ld_reg(ram, &reg->l, &reg->d); break;
-	case 0x6B: ld_reg(ram, &reg->l, &reg->e); break;
-	case 0x6C: ld_reg(ram, &reg->l, &reg->h); break;
-	case 0x6D: ld_reg(ram, &reg->l, &reg->l); break;
+	case 0x67: ld(&reg->h, &reg->a); break;
+	case 0x68: ld(&reg->l, &reg->b); break;
+	case 0x69: ld(&reg->l, &reg->c); break;
+	case 0x6A: ld(&reg->l, &reg->d); break;
+	case 0x6B: ld(&reg->l, &reg->e); break;
+	case 0x6C: ld(&reg->l, &reg->h); break;
+	case 0x6D: ld(&reg->l, &reg->l); break;
 	case 0x6E: nop(); break; //TODO
-	case 0x6F: ld_reg(ram, &reg->l, &reg->a); break;
+	case 0x6F: ld(&reg->l, &reg->a); break;
 	
 	case 0x76: nop(); break; //TODO
 	case 0x77: nop(); break; //TODO
-	case 0x78: ld_reg(ram, &reg->a, &reg->b); break;
-	case 0x79: ld_reg(ram, &reg->a, &reg->c); break;
-	case 0x7A: ld_reg(ram, &reg->a, &reg->d); break;
-	case 0x7B: ld_reg(ram, &reg->a, &reg->e); break;
-	case 0x7C: ld_reg(ram, &reg->a, &reg->h); break;
-	case 0x7D: ld_reg(ram, &reg->a, &reg->l); break;
+	case 0x78: ld(&reg->a, &reg->b); break;
+	case 0x79: ld(&reg->a, &reg->c); break;
+	case 0x7A: ld(&reg->a, &reg->d); break;
+	case 0x7B: ld(&reg->a, &reg->e); break;
+	case 0x7C: ld(&reg->a, &reg->h); break;
+	case 0x7D: ld(&reg->a, &reg->l); break;
 	case 0x7E: nop(); break; //TODO
-	case 0x7F: ld_reg(ram, &reg->a, &reg->a); break;
+	case 0x7F: ld(&reg->a, &reg->a); break;
 
 	case 0x80: add(&reg->a, &reg->b, &reg->f); break;
 	case 0x81: add(&reg->a, &reg->c, &reg->f); break;
@@ -272,22 +273,6 @@ void add(uint8_t *dest, uint8_t *src, uint8_t *flag)
 }
 
 /*
- * Load reg into 0xFF00 + mem_offset.
- */
-void ld_mem(RAM *ram, uint8_t *mem_offset, uint8_t *reg)
-{
-	ram->mem[0xFF00 + *mem_offset] = *reg;
-}
-
-/*
- * Load 0xFF00 + mem_offset into reg.
- */
-void ld_reg(RAM *ram, uint8_t *reg, uint8_t *mem_offset)
-{
-	*reg = ram->mem[0xFF00 + *mem_offset];
-}
-
-/*
  * Increment the parameter register. Z 0 H (U)
  * TODO set flag
  */
@@ -332,6 +317,13 @@ void lxor(uint8_t *dest, uint8_t *src, uint8_t *f)
 	*dest ^= *src;
 }
 
+/*
+ * Load src into destination register.
+ */
+void ld(uint8_t *dest, uint8_t *src)
+{
+	*dest = *src;
+}
 
 //note: might need to take endianess into account
 
