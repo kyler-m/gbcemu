@@ -56,8 +56,9 @@ void	land(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	ld(uint8_t *dest, uint8_t *src);
 void	cp(uint8_t *reg, uint8_t *n, uint8_t *f);
 void	ret(uint16_t *sp, uint16_t *pc);
-void	set(uint8_t *b, uint8_t *reg);
-void	res(uint8_t *b, uint8_t *reg);
+void	set(uint8_t *reg, uint8_t *b);
+void	res(uint8_t *reg, uint8_t *b);
+void	bit(uint8_t *reg, uint8_t *b);
 int	fetch_decode(RAM *ram, int pc);
 int	decode1B(RAM *ram, registers *reg, uint8_t opc);
 int	decode2B(RAM *ram, registers *reg, uint8_t opc);
@@ -391,18 +392,29 @@ void ret(uint16_t *sp, uint16_t *pc)
 /*
  * Set bit b in register reg.
  */
-void set(uint8_t *b, uint8_t *reg)
+void set(uint8_t *reg, uint8_t *b)
 {
 	*reg |= (0x1 << *b);
 }
 
 /*
  * Reset bit b in register reg.
- * Logic is wrong here; TODO FIX
  */
-void res(uint8_t *b, uint8_t *reg)
+void res(uint8_t *reg, uint8_t *b)
 {
 	*reg &= ~(0x1 << *b);
+
+}
+
+/*
+ * Test bit b in register reg. Z 0 1 (U)
+ * TODO set flag
+ */
+void bit(uint8_t *reg, uint8_t *b, uint8_t *f)
+{
+	uint8_t res;
+	
+	res = *reg & (0x1 << *b);
 
 }
 
