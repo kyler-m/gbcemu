@@ -56,6 +56,7 @@ void	land(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	ld(uint8_t *dest, uint8_t *src);
 void	cp(uint8_t *reg, uint8_t *n, uint8_t *f);
 void	ret(uint16_t *sp, uint16_t *pc);
+void	set(uint8_t *b, uint8_t *reg);
 int	fetch_decode(RAM *ram, int pc);
 int	decode1B(RAM *ram, registers *reg, uint8_t opc);
 int	decode2B(RAM *ram, registers *reg, uint8_t opc);
@@ -384,6 +385,14 @@ void cp(uint8_t *reg, uint8_t *n, uint8_t *f)
 void ret(uint16_t *sp, uint16_t *pc)
 {
 	*pc = *sp++;
+}
+
+/*
+ * Set bit b in register reg.
+ */
+void set(uint8_t *b, uint8_t *reg)
+{
+	*reg |= (0x1 << *b);
 }
 
 //note: might need to take endianess into account
