@@ -54,6 +54,7 @@ void	lxor(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	lor(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	land(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	ld(uint8_t *dest, uint8_t *src);
+void	cp(uint8_t *reg, uint8_t *n, uint8_t *f);
 int	fetch_decode(RAM *ram, int pc);
 int	decode1B(RAM *ram, registers *reg, uint8_t opc);
 int	decode2B(RAM *ram, registers *reg, uint8_t opc);
@@ -236,6 +237,15 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
 	case 0xB6: nop(); break; //TODO
 	case 0xB7: lor(&reg->a, &reg->a, &reg->f); break;
 	
+	case 0xB8: cp(&reg->a, &reg->b, &reg->f); break;
+	case 0xB9: cp(&reg->a, &reg->c, &reg->f); break;
+	case 0xBA: cp(&reg->a, &reg->d, &reg->f); break;
+	case 0xBB: cp(&reg->a, &reg->e, &reg->f); break;
+	case 0xBC: cp(&reg->a, &reg->h, &reg->f); break;
+	case 0xBD: cp(&reg->a, &reg->l, &reg->f); break;
+	case 0xBE: nop(); break; //TODO
+	case 0xBF: cp(&reg->a, &reg->a, &reg->f); break;
+	
 	}
 	
 	return (0);
@@ -353,6 +363,18 @@ void ld(uint8_t *dest, uint8_t *src)
 	*dest = *src;
 }
 
+/*
+ * Compare reg with n. Z 1 H C
+ */
+void cp(uint8_t *reg, uint8_t *n, uint8_t *f)
+{
+	uint8_t res;
+	
+	res = *reg - *n;
+	
+	//set flags..
+}
+
 //note: might need to take endianess into account
 
 int main() 
@@ -364,12 +386,17 @@ int main()
 	init_registers(&reg);
 	reg.a = 0x1;
 	reg.b = 0x2;
-	ram.mem[reg.pc] = 0x80;
-	//for (;;) 
+	ram.mem[reg.pc] = 0x04;
+	ram.mem[reg.pc + 1] = 0x90;
+	/*for (;;) {
 		if (fetch_decode(&ram, &reg) < 0)
 			return (-1);
+	}*/
+	
+	fetch_decode(&ram, &reg);
+	fetch_decode(&ram, &reg);
 		
-	printf("%lu\n", reg.a);
+	printf("%d\n", reg.a);
 		
 	return (0); 
 }
