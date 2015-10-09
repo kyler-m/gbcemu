@@ -45,6 +45,7 @@ void	init_registers(registers *reg);
 void	init_ram(RAM *ram);
 void	nop();
 void	add(uint8_t *dest, uint8_t *src, uint8_t *flag);
+void	sub(uint8_t *dest, uint8_t *src, uint8_t *flag);
 void	ld_mem(RAM *ram, uint8_t *mem_offset, uint8_t *reg);
 void	ld_reg(RAM *ram, uint8_t *reg, uint8_t *mem_offset);
 void 	inc(uint8_t *reg, uint8_t *f);
@@ -199,6 +200,15 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
 	case 0x86: nop(); break; //TODO
 	case 0x87: add(&reg->a, &reg->a, &reg->f); break;
 	
+	case 0x90: sub(&reg->a, &reg->b, &reg->f); break;
+	case 0x91: sub(&reg->a, &reg->c, &reg->f); break;
+	case 0x92: sub(&reg->a, &reg->d, &reg->f); break;
+	case 0x93: sub(&reg->a, &reg->e, &reg->f); break;
+	case 0x94: sub(&reg->a, &reg->h, &reg->f); break;
+	case 0x95: sub(&reg->a, &reg->l, &reg->f); break;
+	case 0x96: nop(); break; //TODO
+	case 0x97: sub(&reg->a, &reg->a, &reg->f); break;
+	
 	case 0xA0: land(&reg->a, &reg->b, &reg->f); break;
 	case 0xA1: land(&reg->a, &reg->c, &reg->f); break;
 	case 0xA2: land(&reg->a, &reg->d, &reg->f); break;
@@ -255,7 +265,7 @@ int decode2B(RAM *ram, registers *reg, uint8_t opc_hi)
 void nop() { }
 
 /**
- * Adds src register to dest register. Sets flag byte; outcome: Z 0 H C
+ * Adds src register to dest register. Z 0 H C
  * TODO set flag
  */
 void add(uint8_t *dest, uint8_t *src, uint8_t *flag)
@@ -271,6 +281,24 @@ void add(uint8_t *dest, uint8_t *src, uint8_t *flag)
 	}
 	//todo set H, C
 }
+
+/**
+ * Adds src register to dest register. Z 0 H C
+ * TODO set flag
+ */
+void sub(uint8_t *dest, uint8_t *src, uint8_t *flag)
+{
+	int prev = *dest;
+	
+	*flag = clear(*flag);
+	
+	*dest -= *src;
+	
+	if (*dest == 0) {
+		*flag = setz(*flag);
+	}
+}
+
 
 /*
  * Increment the parameter register. Z 0 H (U)
