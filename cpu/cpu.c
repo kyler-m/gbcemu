@@ -48,6 +48,7 @@ void	add(uint8_t *dest, uint8_t *src, uint8_t *flag);
 void	ld_mem(RAM *ram, uint8_t *mem_offset, uint8_t *reg);
 void	ld_reg(RAM *ram, uint8_t *reg, uint8_t *mem_offset);
 void 	inc(uint8_t *reg, uint8_t *f);
+void 	dec(uint8_t *reg, uint8_t *f);
 int	fetch_decode(RAM *ram, int pc);
 int	decode1B(RAM *ram, registers *reg, uint8_t opc);
 int	decode2B(RAM *ram, registers *reg, uint8_t opc);
@@ -261,6 +262,15 @@ void ld_reg(RAM *ram, uint8_t *reg, uint8_t *mem_offset)
 void inc(uint8_t *reg, uint8_t *f)
 {
 	*reg++;
+}
+
+/*
+ * Decrement the parameter register. Z 1 H (U)
+ * TODO set flag
+ */
+void dec(uint8_t *reg, uint8_t *f)
+{
+	*reg--;
 }
 
 //note: might need to take endianess into account
