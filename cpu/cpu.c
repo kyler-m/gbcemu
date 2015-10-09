@@ -47,9 +47,11 @@ void	nop();
 void	add(uint8_t *dest, uint8_t *src, uint8_t *flag);
 void	ld_mem(RAM *ram, uint8_t *mem_offset, uint8_t *reg);
 void	ld_reg(RAM *ram, uint8_t *reg, uint8_t *mem_offset);
+void 	inc(uint8_t *reg, uint8_t *f);
 int	fetch_decode(RAM *ram, int pc);
 int	decode1B(RAM *ram, registers *reg, uint8_t opc);
 int	decode2B(RAM *ram, registers *reg, uint8_t opc);
+
 
 /**
  * Set the registers to their initial states.
@@ -89,9 +91,9 @@ int fetch_decode(RAM *ram, registers *reg)
 	
 	//check to see if it's a CB prefix, if so then it's just a prefix
 	if (CBOP(opc))
-		return fetch_decode2B(ram, reg, opc);
+		return decode2B(ram, reg, opc);
 	else
-		return fetch_decode1B(ram, reg, opc);
+		return decode1B(ram, reg, opc);
 }
 
 /**
@@ -106,20 +108,20 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
 		
 	case 0x00: nop(); break;
 	
-	case 0x04: inc(&reg->b); break;
+	case 0x04: inc(&reg->b, &reg->f); break;
 	
-	case 0x0C: inc(&reg->c); break;
+	case 0x0C: inc(&reg->c, &reg->f); break;
 	
-	case 0x14: inc(&reg->d); break;
+	case 0x14: inc(&reg->d, &reg->f); break;
 	
-	case 0x1C: inc(&reg->e); break;
+	case 0x1C: inc(&reg->e, &reg->f); break;
 	
-	case 0x24: inc(&reg->h); break;
+	case 0x24: inc(&reg->h, &reg->f); break;
 	
-	case 0x2C: inc(&reg->l); break;
+	case 0x2C: inc(&reg->l, &reg->f); break;
 	
 	//....
-	case 0x3C: inc(&reg->a); break;
+	case 0x3C: inc(&reg->a, &reg->f); break;
 	
 	case 0x40: ld_reg(ram, &reg->b, &reg->b); break;
 	case 0x41: ld_reg(ram, &reg->b, &reg->c); break;
@@ -220,6 +222,7 @@ void nop() { }
 
 /**
  * Adds src register to dest register. Sets flag byte; outcome: Z 0 H C
+ * TODO set flag
  */
 void add(uint8_t *dest, uint8_t *src, uint8_t *flag)
 {
@@ -253,8 +256,9 @@ void ld_reg(RAM *ram, uint8_t *reg, uint8_t *mem_offset)
 
 /*
  * Increment the parameter register. Z 0 H (U)
+ * TODO set flag
  */
-void inc(uint8_t *reg)
+void inc(uint8_t *reg, uint8_t *f)
 {
 	*reg++;
 }
