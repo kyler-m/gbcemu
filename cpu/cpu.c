@@ -50,6 +50,7 @@ void	ld_reg(RAM *ram, uint8_t *reg, uint8_t *mem_offset);
 void 	inc(uint8_t *reg, uint8_t *f);
 void 	dec(uint8_t *reg, uint8_t *f);
 void	lor(uint8_t *dest, uint8_t *src, uint8_t *f);
+void	land(uint8_t *dest, uint8_t *src, uint8_t *f);
 int	fetch_decode(RAM *ram, int pc);
 int	decode1B(RAM *ram, registers *reg, uint8_t opc);
 int	decode2B(RAM *ram, registers *reg, uint8_t opc);
@@ -193,6 +194,17 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
 	case 0x83: add(&reg->a, &reg->e, &reg->f); break;
 	case 0x84: add(&reg->a, &reg->h, &reg->f); break;
 	case 0x85: add(&reg->a, &reg->l, &reg->f); break;
+	case 0x86: nop(); break; //TODO
+	case 0x87: add(&reg->a, &reg->a, &reg->f); break;
+	
+	case 0xB0: lor(&reg->a, &reg->b, &reg->f); break;
+	case 0xB1: lor(&reg->a, &reg->c, &reg->f); break;
+	case 0xB2: lor(&reg->a, &reg->d, &reg->f); break;
+	case 0xB3: lor(&reg->a, &reg->e, &reg->f); break;
+	case 0xB4: lor(&reg->a, &reg->h, &reg->f); break;
+	case 0xB5: lor(&reg->a, &reg->l, &reg->f); break;
+	case 0xB6: nop(); break; //TODO
+	case 0xB7: lor(&reg->a, &reg->a, &reg->f); break;
 	
 	}
 	
@@ -275,13 +287,23 @@ void dec(uint8_t *reg, uint8_t *f)
 }
 
 /*
- * Put *dest | *src in dest. Z 0 0 0
+ * Logical or of *dest and *src. Result in dest. Z 0 0 0
  * TODO set flag
  */
 void lor(uint8_t *dest, uint8_t *src, uint8_t *f)
 {
 	*dest |= *src;
 }
+
+/*
+ * Logical and of *dest and *src. Result in dest. Z 0 1 0
+ * TODO set flag
+ */
+void land(uint8_t *dest, uint8_t *src, uint8_t *f)
+{
+	*dest &= *src;
+}
+
 
 //note: might need to take endianess into account
 
