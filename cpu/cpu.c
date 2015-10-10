@@ -56,12 +56,12 @@ void	land(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	ld(uint8_t *dest, uint8_t *src);
 void	cp(uint8_t *reg, uint8_t *n, uint8_t *f);
 void	ret(uint16_t *sp, uint16_t *pc);
-void	set(uint8_t *reg, uint8_t *b);
-void	res(uint8_t *reg, uint8_t *b);
-void	bit(uint8_t *reg, uint8_t *b);
+void	set(uint8_t *reg, uint8_t b);
+void	res(uint8_t *reg, uint8_t b);
+void	bit(uint8_t *reg, uint8_t b, uint8_t *f);
 int	fetch_decode(RAM *ram, int pc);
 int	decode1B(RAM *ram, registers *reg, uint8_t opc);
-int	decode2B(RAM *ram, registers *reg, uint8_t opc);
+int	decode2B(RAM *ram, registers *reg);
 
 
 /**
@@ -102,7 +102,7 @@ int fetch_decode(RAM *ram, registers *reg)
 	
 	//check to see if it's a CB prefix, if so then it's just a prefix
 	if (CBOP(opc))
-		return decode2B(ram, reg, opc);
+		return decode2B(ram, reg);
 	else
 		return decode1B(ram, reg, opc);
 }
@@ -241,7 +241,7 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
 	case 0xB6: nop(); break; //TODO
 	case 0xB7: lor(&reg->a, &reg->a, &reg->f); break;
 	
-	case 0xB8: cp(&reg->a, &reg->b, &reg->f); break;
+	case 0xB8: cp(&reg->a, &reg->b, &reg->f); break; //cp needs to be implemented
 	case 0xB9: cp(&reg->a, &reg->c, &reg->f); break;
 	case 0xBA: cp(&reg->a, &reg->d, &reg->f); break;
 	case 0xBB: cp(&reg->a, &reg->e, &reg->f); break;
@@ -264,15 +264,285 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
  *
  * Return -1 on failure, 0 on success.
  */
-int decode2B(RAM *ram, registers *reg, uint8_t opc_hi)
+int decode2B(RAM *ram, registers *reg)
 {
-	uint16_t opc;
+	uint8_t opc;
 	
-	opc |= (opc_hi << 4);
-	opc |= ram->mem[reg->pc++];
+	opc = ram->mem[reg->pc++];
 	
-	//now opc is loaded up with the whole opcode
-	//not really necessary
+	switch (opc) {
+		
+	case 0x00: nop(); break; //rlc opc
+	case 0x01: nop(); break;
+	case 0x02: nop(); break;
+	case 0x03: nop(); break;
+	case 0x04: nop(); break;
+	case 0x05: nop(); break;
+	case 0x06: nop(); break;
+	case 0x07: nop(); break;
+	
+	case 0x08: nop(); break; //rrc opc
+	case 0x09: nop(); break;
+	case 0x0A: nop(); break;
+	case 0x0B: nop(); break;
+	case 0x0C: nop(); break;
+	case 0x0D: nop(); break;
+	case 0x0E: nop(); break;
+	case 0x0F: nop(); break;
+	
+	case 0x10: nop(); break; //rl opc
+	case 0x11: nop(); break;
+	case 0x12: nop(); break;
+	case 0x13: nop(); break;
+	case 0x14: nop(); break;
+	case 0x15: nop(); break;
+	case 0x16: nop(); break;
+	case 0x17: nop(); break;
+	
+	case 0x18: nop(); break; //rr opc
+	case 0x19: nop(); break;
+	case 0x1A: nop(); break;
+	case 0x1B: nop(); break;
+	case 0x1C: nop(); break;
+	case 0x1D: nop(); break;
+	case 0x1E: nop(); break;
+	case 0x1F: nop(); break;
+	
+	case 0x20: nop(); break; //sla opc
+	case 0x21: nop(); break;
+	case 0x22: nop(); break;
+	case 0x23: nop(); break;
+	case 0x24: nop(); break;
+	case 0x25: nop(); break;
+	case 0x26: nop(); break;
+	case 0x27: nop(); break;
+	
+	case 0x28: nop(); break; //sra opc
+	case 0x29: nop(); break;
+	case 0x2A: nop(); break;
+	case 0x2B: nop(); break;
+	case 0x2C: nop(); break;
+	case 0x2D: nop(); break;
+	case 0x2E: nop(); break;
+	case 0x2F: nop(); break;
+	
+	case 0x30: nop(); break; //swap opc
+	case 0x31: nop(); break;
+	case 0x32: nop(); break;
+	case 0x33: nop(); break;
+	case 0x34: nop(); break;
+	case 0x35: nop(); break;
+	case 0x36: nop(); break;
+	case 0x37: nop(); break;
+	
+	case 0x38: nop(); break; //srl opc
+	case 0x39: nop(); break;
+	case 0x3A: nop(); break;
+	case 0x3B: nop(); break;
+	case 0x3C: nop(); break;
+	case 0x3D: nop(); break;
+	case 0x3E: nop(); break;
+	case 0x3F: nop(); break;
+	
+		
+	case 0x40: bit(&reg->b, 0x0, &reg->f); break;	
+	case 0x41: bit(&reg->c, 0x0, &reg->f); break;
+	case 0x42: bit(&reg->d, 0x0, &reg->f); break;
+	case 0x43: bit(&reg->e, 0x0, &reg->f); break;
+	case 0x44: bit(&reg->h, 0x0, &reg->f); break;
+	case 0x45: bit(&reg->l, 0x0, &reg->f); break;
+	case 0x46: nop(); break; //TODO
+	case 0x47: bit(&reg->a, 0x0, &reg->f); break;
+	case 0x48: bit(&reg->b, 0x1, &reg->f); break;	
+	case 0x49: bit(&reg->c, 0x1, &reg->f); break;
+	case 0x4A: bit(&reg->d, 0x1, &reg->f); break;
+	case 0x4B: bit(&reg->e, 0x1, &reg->f); break;
+	case 0x4C: bit(&reg->h, 0x1, &reg->f); break;
+	case 0x4D: bit(&reg->l, 0x1, &reg->f); break;
+	case 0x4E: nop(); break; //TODO
+	case 0x4F: bit(&reg->a, 0x1, &reg->f); break;
+	case 0x50: bit(&reg->b, 0x2, &reg->f); break;	
+	case 0x51: bit(&reg->c, 0x2, &reg->f); break;
+	case 0x52: bit(&reg->d, 0x2, &reg->f); break;
+	case 0x53: bit(&reg->e, 0x2, &reg->f); break;
+	case 0x54: bit(&reg->h, 0x2, &reg->f); break;
+	case 0x55: bit(&reg->l, 0x2, &reg->f); break;
+	case 0x56: nop(); break; //TODO
+	case 0x57: bit(&reg->a, 0x2, &reg->f); break;
+	case 0x58: bit(&reg->b, 0x3, &reg->f); break;	
+	case 0x59: bit(&reg->c, 0x3, &reg->f); break;
+	case 0x5A: bit(&reg->d, 0x3, &reg->f); break;
+	case 0x5B: bit(&reg->e, 0x3, &reg->f); break;
+	case 0x5C: bit(&reg->h, 0x3, &reg->f); break;
+	case 0x5D: bit(&reg->l, 0x3, &reg->f); break;
+	case 0x5E: nop(); break; //TODO
+	case 0x5F: bit(&reg->a, 0x3, &reg->f); break;
+	case 0x60: bit(&reg->b, 0x4, &reg->f); break;	
+	case 0x61: bit(&reg->c, 0x4, &reg->f); break;
+	case 0x62: bit(&reg->d, 0x4, &reg->f); break;
+	case 0x63: bit(&reg->e, 0x4, &reg->f); break;
+	case 0x64: bit(&reg->h, 0x4, &reg->f); break;
+	case 0x65: bit(&reg->l, 0x4, &reg->f); break;
+	case 0x66: nop(); break; //TODO
+	case 0x67: bit(&reg->a, 0x4, &reg->f); break;
+	case 0x68: bit(&reg->b, 0x5, &reg->f); break;	
+	case 0x69: bit(&reg->c, 0x5, &reg->f); break;
+	case 0x6A: bit(&reg->d, 0x5, &reg->f); break;
+	case 0x6B: bit(&reg->e, 0x5, &reg->f); break;
+	case 0x6C: bit(&reg->h, 0x5, &reg->f); break;
+	case 0x6D: bit(&reg->l, 0x5, &reg->f); break;
+	case 0x6E: nop(); break; //TODO
+	case 0x6F: bit(&reg->a, 0x5, &reg->f); break;
+	case 0x70: bit(&reg->b, 0x6, &reg->f); break;	
+	case 0x71: bit(&reg->c, 0x6, &reg->f); break;
+	case 0x72: bit(&reg->d, 0x6, &reg->f); break;
+	case 0x73: bit(&reg->e, 0x6, &reg->f); break;
+	case 0x74: bit(&reg->h, 0x6, &reg->f); break;
+	case 0x75: bit(&reg->l, 0x6, &reg->f); break;
+	case 0x76: nop(); break; //TODO
+	case 0x77: bit(&reg->a, 0x6, &reg->f); break;
+	case 0x78: bit(&reg->b, 0x7, &reg->f); break;	
+	case 0x79: bit(&reg->c, 0x7, &reg->f); break;
+	case 0x7A: bit(&reg->d, 0x7, &reg->f); break;
+	case 0x7B: bit(&reg->e, 0x7, &reg->f); break;
+	case 0x7C: bit(&reg->h, 0x7, &reg->f); break;
+	case 0x7D: bit(&reg->l, 0x7, &reg->f); break;
+	case 0x7E: nop(); break; //TODO
+	case 0x7F: bit(&reg->a, 0x7, &reg->f); break;
+	case 0x80: res(&reg->b, 0x0); break;	
+	case 0x81: res(&reg->c, 0x0); break;
+	case 0x82: res(&reg->d, 0x0); break;
+	case 0x83: res(&reg->e, 0x0); break;
+	case 0x84: res(&reg->h, 0x0); break;
+	case 0x85: res(&reg->l, 0x0); break;
+	case 0x86: nop(); break; //TODO
+	case 0x87: res(&reg->a, 0x0); break;
+	case 0x88: res(&reg->b, 0x1); break;	
+	case 0x89: res(&reg->c, 0x1); break;
+	case 0x8A: res(&reg->d, 0x1); break;
+	case 0x8B: res(&reg->e, 0x1); break;
+	case 0x8C: res(&reg->h, 0x1); break;
+	case 0x8D: res(&reg->l, 0x1); break;
+	case 0x8E: nop(); break; //TODO
+	case 0x8F: res(&reg->a, 0x1); break;
+	case 0x90: res(&reg->b, 0x2); break;	
+	case 0x91: res(&reg->c, 0x2); break;
+	case 0x92: res(&reg->d, 0x2); break;
+	case 0x93: res(&reg->e, 0x2); break;
+	case 0x94: res(&reg->h, 0x2); break;
+	case 0x95: res(&reg->l, 0x2); break;
+	case 0x96: nop(); break; //TODO
+	case 0x97: res(&reg->a, 0x2); break;
+	case 0x98: res(&reg->b, 0x3); break;	
+	case 0x99: res(&reg->c, 0x3); break;
+	case 0x9A: res(&reg->d, 0x3); break;
+	case 0x9B: res(&reg->e, 0x3); break;
+	case 0x9C: res(&reg->h, 0x3); break;
+	case 0x9D: res(&reg->l, 0x3); break;
+	case 0x9E: nop(); break; //TODO
+	case 0x9F: res(&reg->a, 0x3); break;
+	case 0xA0: res(&reg->b, 0x4); break;	
+	case 0xA1: res(&reg->c, 0x4); break;
+	case 0xA2: res(&reg->d, 0x4); break;
+	case 0xA3: res(&reg->e, 0x4); break;
+	case 0xA4: res(&reg->h, 0x4); break;
+	case 0xA5: res(&reg->l, 0x4); break;
+	case 0xA6: nop(); break; //TODO
+	case 0xA7: res(&reg->a, 0x4); break;
+	case 0xA8: res(&reg->b, 0x5); break;	
+	case 0xA9: res(&reg->c, 0x5); break;
+	case 0xAA: res(&reg->d, 0x5); break;
+	case 0xAB: res(&reg->e, 0x5); break;
+	case 0xAC: res(&reg->h, 0x5); break;
+	case 0xAD: res(&reg->l, 0x5); break;
+	case 0xAE: nop(); break; //TODO
+	case 0xAF: res(&reg->a, 0x5); break;
+	case 0xB0: res(&reg->b, 0x6); break;	
+	case 0xB1: res(&reg->c, 0x6); break;
+	case 0xB2: res(&reg->d, 0x6); break;
+	case 0xB3: res(&reg->e, 0x6); break;
+	case 0xB4: res(&reg->h, 0x6); break;
+	case 0xB5: res(&reg->l, 0x6); break;
+	case 0xB6: nop(); break; //TODO
+	case 0xB7: res(&reg->a, 0x6); break;
+	case 0xB8: res(&reg->b, 0x7); break;	
+	case 0xB9: res(&reg->c, 0x7); break;
+	case 0xBA: res(&reg->d, 0x7); break;
+	case 0xBB: res(&reg->e, 0x7); break;
+	case 0xBC: res(&reg->h, 0x7); break;
+	case 0xBD: res(&reg->l, 0x7); break;
+	case 0xBE: nop(); break; //TODO
+	case 0xBF: res(&reg->a, 0x7); break;
+	case 0xC0: set(&reg->b, 0x0); break;	
+	case 0xC1: set(&reg->c, 0x0); break;
+	case 0xC2: set(&reg->d, 0x0); break;
+	case 0xC3: set(&reg->e, 0x0); break;
+	case 0xC4: set(&reg->h, 0x0); break;
+	case 0xC5: set(&reg->l, 0x0); break;
+	case 0xC6: nop(); break; //TODO
+	case 0xC7: set(&reg->a, 0x0); break;
+	case 0xC8: set(&reg->b, 0x1); break;	
+	case 0xC9: set(&reg->c, 0x1); break;
+	case 0xCA: set(&reg->d, 0x1); break;
+	case 0xCB: set(&reg->e, 0x1); break;
+	case 0xCC: set(&reg->h, 0x1); break;
+	case 0xCD: set(&reg->l, 0x1); break;
+	case 0xCE: nop(); break; //TODO
+	case 0xCF: set(&reg->a, 0x1); break;
+	case 0xD0: set(&reg->b, 0x2); break;	
+	case 0xD1: set(&reg->c, 0x2); break;
+	case 0xD2: set(&reg->d, 0x2); break;
+	case 0xD3: set(&reg->e, 0x2); break;
+	case 0xD4: set(&reg->h, 0x2); break;
+	case 0xD5: set(&reg->l, 0x2); break;
+	case 0xD6: nop(); break; //TODO
+	case 0xD7: set(&reg->a, 0x2); break;
+	case 0xD8: set(&reg->b, 0x3); break;	
+	case 0xD9: set(&reg->c, 0x3); break;
+	case 0xDA: set(&reg->d, 0x3); break;
+	case 0xDB: set(&reg->e, 0x3); break;
+	case 0xDC: set(&reg->h, 0x3); break;
+	case 0xDD: set(&reg->l, 0x3); break;
+	case 0xDE: nop(); break; //TODO
+	case 0xDF: set(&reg->a, 0x3); break;
+	case 0xE0: set(&reg->b, 0x4); break;	
+	case 0xE1: set(&reg->c, 0x4); break;
+	case 0xE2: set(&reg->d, 0x4); break;
+	case 0xE3: set(&reg->e, 0x4); break;
+	case 0xE4: set(&reg->h, 0x4); break;
+	case 0xE5: set(&reg->l, 0x4); break;
+	case 0xE6: nop(); break; //TODO
+	case 0xE7: set(&reg->a, 0x4); break;
+	case 0xE8: set(&reg->b, 0x5); break;	
+	case 0xE9: set(&reg->c, 0x5); break;
+	case 0xEA: set(&reg->d, 0x5); break;
+	case 0xEB: set(&reg->e, 0x5); break;
+	case 0xEC: set(&reg->h, 0x5); break;
+	case 0xED: set(&reg->l, 0x5); break;
+	case 0xEE: nop(); break; //TODO
+	case 0xEF: set(&reg->a, 0x5); break;
+	case 0xF0: set(&reg->b, 0x6); break;	
+	case 0xF1: set(&reg->c, 0x6); break;
+	case 0xF2: set(&reg->d, 0x6); break;
+	case 0xF3: set(&reg->e, 0x6); break;
+	case 0xF4: set(&reg->h, 0x6); break;
+	case 0xF5: set(&reg->l, 0x6); break;
+	case 0xF6: nop(); break; //TODO
+	case 0xF7: set(&reg->a, 0x6); break;
+	case 0xF8: set(&reg->b, 0x7); break;	
+	case 0xF9: set(&reg->c, 0x7); break;
+	case 0xFA: set(&reg->d, 0x7); break;
+	case 0xFB: set(&reg->e, 0x7); break;
+	case 0xFC: set(&reg->h, 0x7); break;
+	case 0xFD: set(&reg->l, 0x7); break;
+	case 0xFE: nop(); break; //TODO
+	case 0xFF: set(&reg->a, 0x7); break;
+		
+	default: return (-1);
+		
+	}
+	
+	
 	
 	return (0);
 }
@@ -280,7 +550,8 @@ int decode2B(RAM *ram, registers *reg, uint8_t opc_hi)
 /**
  * No-op.
  */
-void nop() { }
+void nop() { 
+}
 
 /**
  * Adds src register to dest register. Z 0 H C
@@ -394,17 +665,17 @@ void ret(uint16_t *sp, uint16_t *pc)
 /*
  * Set bit b in register reg.
  */
-void set(uint8_t *reg, uint8_t *b)
+void set(uint8_t *reg, uint8_t b)
 {
-	*reg |= (0x1 << *b);
+	*reg |= (0x1 << b);
 }
 
 /*
  * Reset bit b in register reg.
  */
-void res(uint8_t *reg, uint8_t *b)
+void res(uint8_t *reg, uint8_t b)
 {
-	*reg &= ~(0x1 << *b);
+	*reg &= ~(0x1 << b);
 
 }
 
@@ -412,11 +683,11 @@ void res(uint8_t *reg, uint8_t *b)
  * Test bit b in register reg. Z 0 1 (U)
  * TODO set flag
  */
-void bit(uint8_t *reg, uint8_t *b, uint8_t *f)
+void bit(uint8_t *reg, uint8_t b, uint8_t *f)
 {
 	uint8_t res;
 	
-	res = *reg & (0x1 << *b);
+	res = *reg & (0x1 << b);
 
 }
 
