@@ -252,6 +252,8 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
 	
 	case 0xC9: ret(&reg->sp, &reg->pc); break;
 	
+	default: return (-1);
+	
 	}
 	
 	return (0);
