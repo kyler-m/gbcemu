@@ -59,7 +59,9 @@ void	ret(uint16_t *sp, uint16_t *pc);
 void	set(uint8_t *reg, uint8_t b);
 void	res(uint8_t *reg, uint8_t b);
 void	bit(uint8_t *reg, uint8_t b, uint8_t *f);
-int	fetch_decode(RAM *ram, int pc);
+void	rlc(uint8_t *reg, uint8_t *f);
+void	rrc(uint8_t *reg, uint8_t *f);
+int	fetch_decode(RAM *ram, registers *reg);
 int	decode1B(RAM *ram, registers *reg, uint8_t opc);
 int	decode2B(RAM *ram, registers *reg);
 
@@ -280,7 +282,6 @@ int decode2B(RAM *ram, registers *reg)
 	case 0x05: nop(); break;
 	case 0x06: nop(); break;
 	case 0x07: nop(); break;
-	
 	case 0x08: nop(); break; //rrc opc
 	case 0x09: nop(); break;
 	case 0x0A: nop(); break;
@@ -289,7 +290,6 @@ int decode2B(RAM *ram, registers *reg)
 	case 0x0D: nop(); break;
 	case 0x0E: nop(); break;
 	case 0x0F: nop(); break;
-	
 	case 0x10: nop(); break; //rl opc
 	case 0x11: nop(); break;
 	case 0x12: nop(); break;
@@ -298,7 +298,6 @@ int decode2B(RAM *ram, registers *reg)
 	case 0x15: nop(); break;
 	case 0x16: nop(); break;
 	case 0x17: nop(); break;
-	
 	case 0x18: nop(); break; //rr opc
 	case 0x19: nop(); break;
 	case 0x1A: nop(); break;
@@ -307,7 +306,6 @@ int decode2B(RAM *ram, registers *reg)
 	case 0x1D: nop(); break;
 	case 0x1E: nop(); break;
 	case 0x1F: nop(); break;
-	
 	case 0x20: nop(); break; //sla opc
 	case 0x21: nop(); break;
 	case 0x22: nop(); break;
@@ -316,7 +314,6 @@ int decode2B(RAM *ram, registers *reg)
 	case 0x25: nop(); break;
 	case 0x26: nop(); break;
 	case 0x27: nop(); break;
-	
 	case 0x28: nop(); break; //sra opc
 	case 0x29: nop(); break;
 	case 0x2A: nop(); break;
@@ -325,7 +322,6 @@ int decode2B(RAM *ram, registers *reg)
 	case 0x2D: nop(); break;
 	case 0x2E: nop(); break;
 	case 0x2F: nop(); break;
-	
 	case 0x30: nop(); break; //swap opc
 	case 0x31: nop(); break;
 	case 0x32: nop(); break;
@@ -334,7 +330,6 @@ int decode2B(RAM *ram, registers *reg)
 	case 0x35: nop(); break;
 	case 0x36: nop(); break;
 	case 0x37: nop(); break;
-	
 	case 0x38: nop(); break; //srl opc
 	case 0x39: nop(); break;
 	case 0x3A: nop(); break;
@@ -343,8 +338,6 @@ int decode2B(RAM *ram, registers *reg)
 	case 0x3D: nop(); break;
 	case 0x3E: nop(); break;
 	case 0x3F: nop(); break;
-	
-		
 	case 0x40: bit(&reg->b, 0x0, &reg->f); break;	
 	case 0x41: bit(&reg->c, 0x0, &reg->f); break;
 	case 0x42: bit(&reg->d, 0x0, &reg->f); break;
@@ -689,6 +682,24 @@ void bit(uint8_t *reg, uint8_t b, uint8_t *f)
 	
 	res = *reg & (0x1 << b);
 
+}
+
+/*
+ * Rotate the parameter register left. Set old bit 7 to carry. Z 0 0 C
+ * TODO set flag
+ */
+void rlc(uint8_t *reg, uint8_t *f)
+{
+	*reg << 0x1;
+}
+
+/*
+ * Rotate the parameter register right. Set old bit 7 to carry. Z 0 0 C
+ * TODO set flag
+ */
+void rrc(uint8_t *reg, uint8_t *f)
+{
+	*reg >> 0x1;
 }
 
 //note: might need to take endianess into account
