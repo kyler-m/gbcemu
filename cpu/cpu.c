@@ -718,6 +718,18 @@ void rrc(uint8_t *reg, uint8_t *f)
 	*reg >> 0x1;
 }
 
+/*
+ * Swap the high and low bits of the parameter register. Z 0 0 0
+ * TODO set flag
+ */
+void swap(uint8_t *reg, uint8_t *f)
+{
+	uint8_t res;
+	
+	res = (*reg >> 0x4) + (*reg << 0x4);
+	*reg = res;
+}
+
 //note: might need to take endianess into account
 
 int main() 
@@ -744,6 +756,11 @@ int main()
 	uint8_t hi = 0xAB;
 	uint8_t lo = 0xCD;
 	inc(&lo, &hi, NULL);
+	
+	printf("%02x \t %02x\n", hi, lo);
+	
+	swap(&hi, NULL);
+	swap(&lo, NULL);
 	
 	printf("%02x \t %02x\n", hi, lo);
 		
