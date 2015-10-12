@@ -49,6 +49,7 @@ void	sub(uint8_t *dest, uint8_t *src, uint8_t *flag);
 void	ld_mem(RAM *ram, uint8_t *mem_offset, uint8_t *reg);
 void	ld_reg(RAM *ram, uint8_t *reg, uint8_t *mem_offset);
 void 	inc(uint8_t *reg, uint8_t *f);
+void 	inc(uint8_t *reg_hi, uint8_t *reg_lo, uint8_t *f);
 void 	dec(uint8_t *reg, uint8_t *f);
 void	lxor(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	lor(uint8_t *dest, uint8_t *src, uint8_t *f);
@@ -592,6 +593,21 @@ void inc(uint8_t *reg, uint8_t *f)
 }
 
 /*
+ * Increment the parameter 2 byte register. Z 0 H (U)
+ * TODO set flag
+ * There are endian-related problems to be fixed here
+ */
+void inc(uint8_t *reg_hi, uint8_t *reg_lo, uint8_t *f)
+{
+	uint16_t *reg;
+	
+	*reg = *reg_hi + (*reg_lo << 0x8);
+	printf("%04x\n", *reg);
+	*reg_hi = *reg >> 0x8;
+	*reg_lo = (*reg << 0x8) >> 0x8;
+}
+
+/*
  * Decrement the parameter register. Z 1 H (U)
  * TODO set flag
  */
@@ -724,6 +740,12 @@ int main()
 	fetch_decode(&ram, &reg);
 		
 	printf("%d\n", reg.a);
+	
+	uint8_t hi = 0xAB;
+	uint8_t lo = 0xCD;
+	inc(&lo, &hi, NULL);
+	
+	printf("%02x \t %02x\n", hi, lo);
 		
 	return (0); 
 }
