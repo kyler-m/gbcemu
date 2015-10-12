@@ -56,6 +56,7 @@ void	lor(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	land(uint8_t *dest, uint8_t *src, uint8_t *f);
 void	ld(uint8_t *dest, uint8_t *src);
 void	cp(uint8_t *reg, uint8_t *n, uint8_t *f);
+void	swap(uint8_t *reg, uint8_t *f);
 void	ret(uint16_t *sp, uint16_t *pc);
 void	set(uint8_t *reg, uint8_t b);
 void	res(uint8_t *reg, uint8_t b);
@@ -323,14 +324,14 @@ int decode2B(RAM *ram, registers *reg)
 	case 0x2D: nop(); break;
 	case 0x2E: nop(); break;
 	case 0x2F: nop(); break;
-	case 0x30: nop(); break; //swap opc
-	case 0x31: nop(); break;
-	case 0x32: nop(); break;
-	case 0x33: nop(); break;
-	case 0x34: nop(); break;
-	case 0x35: nop(); break;
-	case 0x36: nop(); break;
-	case 0x37: nop(); break;
+	case 0x30: swap(&reg->b, &reg->f); break; //swap opc
+	case 0x31: swap(&reg->c, &reg->f); break;
+	case 0x32: swap(&reg->d, &reg->f); break;
+	case 0x33: swap(&reg->e, &reg->f); break;
+	case 0x34: swap(&reg->h, &reg->f); break;
+	case 0x35: swap(&reg->l, &reg->f); break;
+	case 0x36: nop(); break; //TODO
+	case 0x37: swap(&reg->a, &reg->f); break;
 	case 0x38: nop(); break; //srl opc
 	case 0x39: nop(); break;
 	case 0x3A: nop(); break;
