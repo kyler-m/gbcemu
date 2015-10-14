@@ -44,6 +44,8 @@ typedef struct {
 void	init_registers(registers *reg);
 void	init_ram(RAM *ram);
 void	nop();
+void	stop();
+void	halt();
 void	add(uint8_t *dest, uint8_t *src, uint8_t *flag);
 void	sub(uint8_t *dest, uint8_t *src, uint8_t *flag);
 void	ld_mem(RAM *ram, uint8_t *mem_offset, uint8_t *reg);
@@ -123,17 +125,31 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
 		
 	case 0x00: nop(); break;
 	
+	case 0x06: ld(&reg->b, (uint8_t *)&ram->mem[reg->pc++]); break;
+	
+	case 0x10: stop(); break;
+	
 	case 0x04: inc(&reg->b, &reg->f); break;
 	
 	case 0x0C: inc(&reg->c, &reg->f); break;
 	
+	case 0x0E: ld(&reg->c, (uint8_t *)&ram->mem[reg->pc++]); break;
+	
 	case 0x14: inc(&reg->d, &reg->f); break;
+	
+	case 0x16: ld(&reg->d, (uint8_t *)&ram->mem[reg->pc++]); break;
 	
 	case 0x1C: inc(&reg->e, &reg->f); break;
 	
+	case 0x1E: ld(&reg->e, (uint8_t *)&ram->mem[reg->pc++]); break;
+	
 	case 0x24: inc(&reg->h, &reg->f); break;
 	
+	case 0x26: ld(&reg->h, (uint8_t *)&ram->mem[reg->pc++]); break;
+	
 	case 0x2C: inc(&reg->l, &reg->f); break;
+	
+	case 0x2E: ld(&reg->l, (uint8_t *)&ram->mem[reg->pc++]); break;
 	
 	//....
 	case 0x3C: inc(&reg->a, &reg->f); break;
@@ -189,7 +205,8 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
 	case 0x6E: nop(); break; //TODO
 	case 0x6F: ld(&reg->l, &reg->a); break;
 	
-	case 0x76: nop(); break; //TODO
+	case 0x76: halt(); break; //TODO
+	
 	case 0x77: nop(); break; //TODO
 	case 0x78: ld(&reg->a, &reg->b); break;
 	case 0x79: ld(&reg->a, &reg->c); break;
@@ -253,6 +270,8 @@ int decode1B(RAM *ram, registers *reg, uint8_t opc)
 	case 0xBD: cp(&reg->a, &reg->l, &reg->f); break;
 	case 0xBE: nop(); break; //TODO
 	case 0xBF: cp(&reg->a, &reg->a, &reg->f); break;
+	
+	case 0xC6: add(&reg->a, (uint8_t *)&ram->mem[reg->pc++], &reg->f); break;
 	
 	case 0xC9: ret(&reg->sp, &reg->pc); break;
 	
@@ -545,9 +564,29 @@ int decode2B(RAM *ram, registers *reg)
 /**
  * No-op.
  */
-void nop() { 
+void nop() 
+{ 
 }
 
+/**
+ * Stop the processor until a button is pressed.
+ * Further implementation necessary.
+ */
+void stop() 
+{
+	//stop display
+	for (;;);
+}
+
+/**
+ * Stop the system clock until there's an interrupt.
+ * Further implementation necessary.
+ */
+void halt()
+{
+	
+}
+	
 /**
  * Adds src register to dest register. Z 0 H C
  * TODO set flag
