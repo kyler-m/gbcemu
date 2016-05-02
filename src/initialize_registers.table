@@ -1,0 +1,39 @@
+/* Registers */
+AF 	= 0x01;
+F 	= 0xB0;
+BC 	= 0x0013;
+DE 	= 0x00D8;
+HL 	= 0x014D;
+SP 	= 0xFFFE;
+/* Memory */
+mput((char *)0xFF05, 0x00, true);   // TIMA
+mput((char *)0xFF06, 0x00, true);   // TMA
+mput((char *)0xFF07, 0x00, true);   // TAC
+mput((char *)0xFF10, 0x80, true);  	// NR10
+mput((char *)0xFF11, 0xBF, true);   // NR11
+mput((char *)0xFF12, 0xF3, true);   // NR12
+mput((char *)0xFF14, 0xBF, true);   // NR14
+mput((char *)0xFF16, 0x3F, true);   // NR21
+mput((char *)0xFF17, 0x00, true);   // NR22
+mput((char *)0xFF19, 0xBF, true);   // NR24
+mput((char *)0xFF1A, 0x7F, true);   // NR30
+mput((char *)0xFF1B, 0xFF, true);  	// NR31
+mput((char *)0xFF1C, 0x9F, true);   // NR32
+mput((char *)0xFF1E, 0xBF, true);   // NR33
+mput((char *)0xFF20, 0xFF, true);   // NR41
+mput((char *)0xFF21, 0x00, true);	// NR42
+mput((char *)0xFF22, 0x00, true);	// NR43
+mput((char *)0xFF23, 0xBF, true); 	// NR30
+mput((char *)0xFF24, 0x77, true);	// NR50
+mput((char *)0xFF25, 0xF3, true);	// NR51
+mput((char *)0xFF26, 0xF1, true);	// NR52
+mput((char *)0xFF40, 0x91, true);   // LCDC
+mput((char *)0xFF42, 0x00, true);  	// SCY
+mput((char *)0xFF43, 0x00, true);   // SCX
+mput((char *)0xFF45, 0x00, true);  	// LYC
+mput((char *)0xFF47, 0xFC, true);   // BGP
+mput((char *)0xFF48, 0xFF, true);  	// OBP0
+mput((char *)0xFF49, 0xFF, true);   // OBP1
+mput((char *)0xFF4A, 0x00, true);  	// WY
+mput((char *)0xFF4B, 0x00, true);  	// WX
+mput((char *)0xFFFF, 0x00, true);  	// IE
